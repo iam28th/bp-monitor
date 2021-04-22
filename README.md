@@ -1,2 +1,2 @@
 # bp-monitor
-Bachelor thesis
+Modelling of Blood Pressure monitor in Proteus (bachelor thesis)
