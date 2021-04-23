@@ -9,6 +9,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "main.h"
 
 // #define F_CPU 1000000
@@ -18,10 +19,14 @@ volatile bool measure_cuff = true;
 
 void PORTS_init() {
 	DDRF &= ((1 << PF0) | (1 << PF1));  // входы АЦП
-	DDRB = 0xFF;
-	PORTB = 0;
+	
+	PORTB|=(1<<SD_SS)|(1<<SD_MISO)|(1<<SD_MOSI);
+	DDRB|= ( (1<<SD_SS)|(1<<SD_MOSI)|(1<<SD_SCK) );
+	DDRB |= (1 << LCD_RS) | (1 << LCD_RW) | (1 << LCD_E);
+	
+	// PORTB = 0;
 	// DDRB |= ((1 << MOSI) | (1 << MISO) | (1 << SCK) | (1 << SS));
-	DDRA = 1;  // LCD
+	DDRA = 0xFF;  // LCD
 	PORTA = 1;
 	DDRD = 1;  // test measure cuff
 }
@@ -54,18 +59,35 @@ int main(void)
 	ADC_init();
 
 	sei();
-
-	ADCSRA |= (1 << ADSC); // начать преобразование
+	
+	// 
+	cli();
 	LCD_init();
 	LCD_send_cmd(LCD_ON);
-	LCD_place_cursor(1, 0);
-	// LCD_send_string("БПАН");
-	unsigned char result = SD_init();
+	char buffer[512]="Read operation";
+	
 	char str[10];
-	sprintf(str, "%d", result);
+	
+	unsigned char result = SD_init();
+	LCD_place_cursor(1, 1);
+	sprintf(str,"%d",result);
 	LCD_send_string(str);
 	
-	int i = 0;
+	
+	result=SD_write_block(buffer,0x00,0x00,0x04,0x00);
+	sprintf(str,"%d",result);
+	LCD_place_cursor(0, 1);
+	LCD_send_string(str);
+	
+	char buffer2[512];
+	SD_read_block(buffer2, 0x00, 0x00, 0x04, 0x00);
+	LCD_place_cursor(0, 1);
+	LCD_send_string(buffer2);
+	
+	sei();
+	
+	ADCSRA |= (1 << ADSC); // начать преобразование
+	
 	while (1) {
 	}
 }

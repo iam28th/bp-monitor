@@ -9,9 +9,9 @@
 
 
 
-const unsigned char RS = PB4;
-const unsigned char RW = PB5;
-const unsigned char E = PB6;
+const unsigned char LCD_RS = PB4;
+const unsigned char LCD_RW = PB5;
+const unsigned char LCD_E = PB6;
 
 const unsigned char LCD_CLEAR = 0b00000001;
 const unsigned char LCD_OFF = 0b00001000;
@@ -25,20 +25,20 @@ const unsigned char LCD_MOVE_CURSOR_RIGHT = 0b00010100;
 
 
 void LCD_send_byte(unsigned char byte)  {
-	PORTB |= (1 << E);	//устанавливаем на стробирующем выводе LCD (E) единицу
+	PORTB |= (1 << LCD_E);	//устанавливаем на стробирующем выводе LCD (E) единицу
 	PORTA = byte;		//выводим данные (на шину данных выводится значение переменной, которая в качестве аргумента передается функции)
 	_delay_us(100);	// формируем задержки для того, чтобы на шине устаканились уровни напряжения
-	PORTB &= ~(1 << E);	// формирование заднего фронта стробирующего сигнала
+	PORTB &= ~(1 << LCD_E);	// формирование заднего фронта стробирующего сигнала
 	_delay_ms(1);		// опять ждем 100 микросекунд для записи данных в LCD
 }
 
 void LCD_send_cmd(unsigned char cmd) {
-	PORTB &= ~(1 << RS);   // RS == 0 => запись команды
+	PORTB &= ~(1 << LCD_RS);   // RS == 0 => запись команды
 	LCD_send_byte(cmd);
 }
 
 void LCD_send_char(unsigned char byte) {
-	PORTB |= (1 << RS);   // RS == 1 => запись данных
+	PORTB |= (1 << LCD_RS);   // RS == 1 => запись данных
 	LCD_send_byte(byte);
 }
 

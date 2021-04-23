@@ -2,12 +2,12 @@
 #ifndef LCD_FUNCTIONS_H_
 #define LCD_FUNCTIONS_H_
 
-#define F_CPU 1000000
+#define F_CPU 8000000UL //1000000
 #include <util/delay.h>
 
 #include <avr/io.h>
 
-const unsigned char RS, RW, E;
+const unsigned char LCD_RS, LCD_RW, LCD_E;
 
 const unsigned char LCD_CLEAR, LCD_ON, LCD_OFF, LCD_FUNCTION_SET, 
 LCD_ENTRY_MODE_SET, LCD_MOVE_CURSOR_RIGHT;
