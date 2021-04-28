@@ -27,7 +27,8 @@ Modelling of Blood Pressure monitor in Proteus (bachelor thesis)
 #### Осцилляции:
 ![osc](https://github.com/iam28th/bp-monitor/blob/master/img/PlotOscillations.jpg)
 
-
+Реализация амплитудного метода определения АД:
+![ampl](https://github.com/iam28th/bp-monitor/blob/master/img/amplitude_method.jpg)
 
 ### References
 
