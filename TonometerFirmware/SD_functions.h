@@ -1,11 +1,3 @@
-/*
- * SD_functions.h
- *
- * Created: 4/19/2021 7:53:50 AM
- *  Author: Home
- */ 
-
-
 #ifndef SD_FUNCTIONS_H_
 #define SD_FUNCTIONS_H_
 
@@ -19,7 +11,7 @@ void SPI_send_byte(unsigned char byte);
 unsigned char SPI_recieve_byte();
 unsigned char SD_send_cmd(const unsigned char *cmd);
 unsigned char SD_init();
-unsigned char SD_write_block(char * bf, unsigned char ad1, 
+unsigned char SD_write_block(char * bf, unsigned char ad1,
 		unsigned char ad2, unsigned char ad3, unsigned char ad4);
 unsigned char SD_read_block(char * bf, unsigned char ad1,
 		unsigned char ad2, unsigned char ad3, unsigned char ad4);

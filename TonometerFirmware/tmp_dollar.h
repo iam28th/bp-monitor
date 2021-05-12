@@ -3,7 +3,7 @@
 
 #include <avr/io.h>
 
-void ADC_init();
+void ADC_init (); // $рот казино$
 void ADC_select_cuff();
 void ADC_select_osc();
 

@@ -1,13 +1,4 @@
-/*
- * LCD_functions.c
- *
- * Created: 4/19/2021 8:39:12 AM
- *  Author: Home
- */ 
-
 #include "LCD_functions.h"
-
-
 
 const unsigned char LCD_RS = PB4;
 const unsigned char LCD_RW = PB5;
@@ -15,56 +6,55 @@ const unsigned char LCD_E = PB6;
 
 const unsigned char LCD_CLEAR = 0b00000001;
 const unsigned char LCD_OFF = 0b00001000;
-// дисплей включён, курсор и его мигание отключены
+// $РґРёСЃРїР»РµР№ РІРєР»СЋС‡С‘РЅ, РєСѓСЂСЃРѕСЂ Рё РµРіРѕ РјРёРіР°РЅРёРµ РѕС‚РєР»СЋС‡РµРЅС‹$
 const unsigned char LCD_ON = 0b00001100;
-// ширина данных - 8 бит; двустрочный режим; 5х10 точек
-const unsigned char LCD_FUNCTION_SET = 0b00111000; // 0b00111100;  // ?  
-// движение курсора слева-направо; текст не "съезжает"
+// $С€РёСЂРёРЅР° РґР°РЅРЅС‹С… - 8 Р±РёС‚; РґРІСѓСЃС‚СЂРѕС‡РЅС‹Р№ СЂРµР¶РёРј; 5С…10 С‚РѕС‡РµРє$
+const unsigned char LCD_FUNCTION_SET = 0b00111000;
+// $РґРІРёР¶РµРЅРёРµ РєСѓСЂСЃРѕСЂР° СЃР»РµРІР°-РЅР°РїСЂР°РІРѕ; С‚РµРєСЃС‚ РЅРµ "СЃСЉРµР·Р¶Р°РµС‚"$
 const unsigned char LCD_ENTRY_MODE_SET = 0b00000110;
 const unsigned char LCD_MOVE_CURSOR_RIGHT = 0b00010100;
 
-
-void LCD_send_byte(unsigned char byte)  {
-	PORTB |= (1 << LCD_E);	//устанавливаем на стробирующем выводе LCD (E) единицу
-	PORTA = byte;		//выводим данные (на шину данных выводится значение переменной, которая в качестве аргумента передается функции)
-	_delay_us(100);	// формируем задержки для того, чтобы на шине устаканились уровни напряжения
-	PORTB &= ~(1 << LCD_E);	// формирование заднего фронта стробирующего сигнала
-	_delay_ms(1);		// опять ждем 100 микросекунд для записи данных в LCD
+void LCD_send_byte(unsigned char byte) {
+    PORTB |= (1 << LCD_E); //$СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РЅР° СЃС‚СЂРѕР±РёСЂСѓСЋС‰РµРј РІС‹РІРѕРґРµ LCD (E) РµРґРёРЅРёС†Сѓ$
+    PORTA = byte; // $РІС‹РІРѕРґ Р·РЅР°С‡РµРЅРёСЏ РЅР° С€РёРЅСѓ РґР°РЅРЅС‹С…$
+    _delay_us(100); // $С„РѕСЂРјРёСЂСѓРµРј Р·Р°РґРµСЂР¶РєРё РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РЅР° С€РёРЅРµ СѓСЃС‚Р°РєР°РЅРёР»РёСЃСЊ СѓСЂРѕРІРЅРё РЅР°РїСЂСЏР¶РµРЅРёСЏ$
+    PORTB &= ~(1 << LCD_E); // $С„РѕСЂРјРёСЂРѕРІР°РЅРёРµ Р·Р°РґРЅРµРіРѕ С„СЂРѕРЅС‚Р° СЃС‚СЂРѕР±РёСЂСѓСЋС‰РµРіРѕ СЃРёРіРЅР°Р»Р°$
+    _delay_ms(1);
 }
 
 void LCD_send_cmd(unsigned char cmd) {
-	PORTB &= ~(1 << LCD_RS);   // RS == 0 => запись команды
-	LCD_send_byte(cmd);
+    PORTB &= ~(1 << LCD_RS); // $RS == 0 => Р·Р°РїРёСЃСЊ РєРѕРјР°РЅРґС‹$
+    LCD_send_byte(cmd);
 }
 
 void LCD_send_char(unsigned char byte) {
-	PORTB |= (1 << LCD_RS);   // RS == 1 => запись данных
-	LCD_send_byte(byte);
+    PORTB |= (1 << LCD_RS); // $RS == 1 => Р·Р°РїРёСЃСЊ РґР°РЅРЅС‹С…$
+    LCD_send_byte(byte);
 }
 
 void LCD_init() {
-	unsigned char cmd = 0b00110000;
-	LCD_send_cmd(cmd);
-	_delay_ms(5);
-	LCD_send_cmd(cmd);
-	_delay_ms(100);
-	LCD_send_cmd(cmd);
-	
-	LCD_send_cmd(LCD_FUNCTION_SET); 
-	LCD_send_cmd(LCD_OFF); 
-	LCD_send_cmd(LCD_CLEAR);	
-	LCD_send_cmd(LCD_ENTRY_MODE_SET);	
-	_delay_ms(10);
-	LCD_send_cmd(LCD_ON); 
+    unsigned char cmd = 0b00110000;
+    LCD_send_cmd(cmd);
+    _delay_ms(5);
+    LCD_send_cmd(cmd);
+    _delay_ms(100);
+    LCD_send_cmd(cmd);
+
+    LCD_send_cmd(LCD_FUNCTION_SET);
+    LCD_send_cmd(LCD_OFF);
+    LCD_send_cmd(LCD_CLEAR);
+    LCD_send_cmd(LCD_ENTRY_MODE_SET);
+    _delay_ms(10);
+    LCD_send_cmd(LCD_ON);
 }
 
 void LCD_send_string(char *string) {
-	for (uint8_t i = 0; string[i] != '\0'; ++i) {
-		LCD_send_char(string[i]);
-	}
+    for (uint8_t i = 0; string[i] != '\0'; ++i) {
+        LCD_send_char(string[i]);
+    }
 }
 
 void LCD_place_cursor(unsigned char a, unsigned char b) {
-	unsigned char cmd = b + (a == 1 ? 0b10000000 : 0b11000000);
-	LCD_send_cmd(cmd);
+    unsigned char cmd = b + (a == 1 ? 0b10000000 : 0b11000000);
+    LCD_send_cmd(cmd);
 }

@@ -1,4 +1,3 @@
-
 #ifndef MAIN_H_
 #define MAIN_H_
 
@@ -8,6 +7,5 @@
 #include "ADC_functions.h"
 #include "SD_functions.h"
 #include "LCD_functions.h"
-
 
 #endif /* MAIN_H_ */
